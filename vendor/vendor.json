@@ -1,0 +1,15 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "XQ6MJzKl0nQD87dovrsnQHaqQKQ=",
+			"path": "github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi",
+			"revision": "1c5a047c5dc5890881c9667a4656b683616cb03b",
+			"revisionTime": "2018-06-07T16:34:33Z",
+			"version": "0.1.0",
+			"versionExact": "0.1.0"
+		}
+	],
+	"rootPath": "github.com/tombuildsstuff/huawei-e5573-mifi-info"
+}
