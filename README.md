@@ -16,7 +16,7 @@ Mifi Status:
 
   Network:
     Signal Strength: 5/5 bars
-    Network:         "I WIND" (ID: 22288)
+    Network:         "I WIND" (ID: 22288 | Mode: 4G/LTE Enabled)
     Bandwidth used:  82.37MB down / 12.13MB up
     Connected for:   2 hours (175 minutes)
 
@@ -27,11 +27,14 @@ Mifi Status:
 
 ## Command Line Arguments
 
-- `endpoint` - specifies the endpoint to the Web Portal. Defaults to `http://192.168.1.1`.
-- `help` - displays all possible command line arguments.
-- `version` - displays the version of the CLI tool.
+- `-dashboard` - opens the Web Portal for the Mifi in your default web browser.
+- `-endpoint` - specifies the endpoint to the Web Portal. Defaults to `http://192.168.1.1`.
+- `-help` - displays all possible command line arguments.
+- `-version` - displays the version of the CLI tool.
 
 
 ## Possible Future Extensions
 
 - Toggling 4G on and off
+- Toggling Automatic/Manual Network Selection
+- Viewing the SMS Inbox
