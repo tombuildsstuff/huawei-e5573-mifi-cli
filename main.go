@@ -9,7 +9,7 @@ import (
 	"github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi"
 )
 
-var versionNumber = "0.1.0"
+var versionNumber = "0.2.0"
 
 type MifiInformation struct {
 	Carrier mifi.Carrier
