@@ -3,13 +3,18 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "XQ6MJzKl0nQD87dovrsnQHaqQKQ=",
+			"path": "]github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi",
+			"revision": "0.2.0",
+			"version": "0.2.0"
+		},
+		{
+			"checksumSHA1": "FRF4+HqPhit27c2gbq7pHZek6RU=",
 			"path": "github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi",
-			"revision": "1c5a047c5dc5890881c9667a4656b683616cb03b",
-			"revisionTime": "2018-06-07T16:34:33Z",
-			"version": "0.1.0",
-			"versionExact": "0.1.0"
+			"revision": "fe6e1c10b36d7888732d31876cf3cd48f8e6a6f2",
+			"revisionTime": "2018-06-10T11:05:53Z",
+			"version": "0.2.0",
+			"versionExact": "0.2.0"
 		}
 	],
-	"rootPath": "github.com/tombuildsstuff/huawei-e5573-mifi-info"
+	"rootPath": "github.com/tombuildsstuff/huawei-e5573-mifi-cli"
 }

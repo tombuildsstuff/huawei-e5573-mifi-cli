@@ -13,13 +13,14 @@ var versionNumber = "0.1.0"
 
 type MifiInformation struct {
 	Carrier mifi.Carrier
+	Network mifi.NetworkSettings
 	Status  mifi.Status
 	Traffic mifi.TrafficStatistics
 	Wifi    mifi.WifiSettings
 }
 
 func main() {
-	endpoint := flag.String("endpoint", "http://192.168.1.1", "The endpoint of the Mifi. Defaults to `http://192.168.1.1`")
+	endpoint := flag.String("endpoint", "http://192.168.1.1", "The endpoint of the Mifi.`")
 	showDashboard := flag.Bool("dashboard", false, "Opens the Dashboard in a Web Browser")
 	showVersion := flag.Bool("version", false, "Display the Application Version")
 	showHelp := flag.Bool("help", false, "Displays this message")
@@ -72,11 +73,6 @@ func openDashboard(m mifi.Mifi) error {
 }
 
 func populateMifiInformation(m mifi.Mifi) (*MifiInformation, error) {
-	err := m.ParseCookie()
-	if err != nil {
-		return nil, fmt.Errorf("Error obtaining authentication cookie for Mifi: %+v", err)
-	}
-
 	wifiSettings, err := m.WifiSettings()
 	if err != nil {
 		return nil, fmt.Errorf("Error getting Wifi Settings from the Mifi: %+v", err)
@@ -85,6 +81,11 @@ func populateMifiInformation(m mifi.Mifi) (*MifiInformation, error) {
 	carrier, err := m.CarrierDetails()
 	if err != nil {
 		return nil, fmt.Errorf("Error getting Carrier Details from the Mifi: %+v", err)
+	}
+
+	network, err := m.NetworkSettings()
+	if err != nil {
+		return nil, fmt.Errorf("Error getting Network Settings from the Mifi: %+v", err)
 	}
 
 	status, err := m.CurrentStatus()
@@ -99,6 +100,7 @@ func populateMifiInformation(m mifi.Mifi) (*MifiInformation, error) {
 
 	info := MifiInformation{
 		Carrier: *carrier,
+		Network: *network,
 		Status:  *status,
 		Traffic: *traffic,
 		Wifi:    *wifiSettings,
@@ -107,7 +109,7 @@ func populateMifiInformation(m mifi.Mifi) (*MifiInformation, error) {
 }
 
 func (mi MifiInformation) format() string {
-	network := buildNetworkInformation(mi.Carrier, mi.Status, mi.Traffic)
+	network := buildNetworkInformation(mi.Carrier, mi.Network, mi.Status, mi.Traffic)
 	info := buildGeneralInformation(mi.Status, mi.Wifi)
 	return fmt.Sprintf(`
 Mifi Status:
@@ -116,18 +118,20 @@ Mifi Status:
 `, network, info)
 }
 
-func buildNetworkInformation(c mifi.Carrier, s mifi.Status, t mifi.TrafficStatistics) string {
+func buildNetworkInformation(c mifi.Carrier, n mifi.NetworkSettings, s mifi.Status, t mifi.TrafficStatistics) string {
 	minutesConnected := t.SecondsConnectedToNetwork / 60
 	hoursConnected := minutesConnected / 60
+	networkMode := n.NetworkMode()
 	str := `
   Network:
     Signal Strength: %d/%d bars
-    Network:         %q (ID: %d)
+    Network:         %q (ID: %d | Mode: %s)
     Bandwidth used:  %.2fMB down / %.2fMB up
     Connected for:   %d hours (%d minutes)`
 	return fmt.Sprintf(str,
 		s.CurrentSignalBars, s.MaxSignalBars,
-		c.FullName, c.CarrierID,
+		// TODO: display "searching/not connected" if not connected?
+		c.FullName, c.CarrierID, networkMode,
 		t.DownloadedMB, t.UploadedMB,
 		hoursConnected, minutesConnected)
 }
