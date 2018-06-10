@@ -9,7 +9,7 @@ import (
 	"github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi"
 )
 
-var versionNumber = "0.2.0"
+var versionNumber = "0.2.1"
 
 type MifiInformation struct {
 	Carrier mifi.Carrier
@@ -121,17 +121,24 @@ Mifi Status:
 func buildNetworkInformation(c mifi.Carrier, n mifi.NetworkSettings, s mifi.Status, t mifi.TrafficStatistics) string {
 	minutesConnected := t.SecondsConnectedToNetwork / 60
 	hoursConnected := minutesConnected / 60
+
 	networkMode := n.NetworkMode()
+	var networkStatusText string
+	if c.FullName == "" {
+		networkStatusText = fmt.Sprintf("Searching.. (Mode: %s)", networkMode)
+	} else {
+		networkStatusText = fmt.Sprintf("%q (ID: %d | Mode: %s)", c.FullName, c.CarrierID, networkMode)
+	}
+
 	str := `
   Network:
     Signal Strength: %d/%d bars
-    Network:         %q (ID: %d | Mode: %s)
+    Network:         %s
     Bandwidth used:  %.2fMB down / %.2fMB up
     Connected for:   %d hours (%d minutes)`
 	return fmt.Sprintf(str,
 		s.CurrentSignalBars, s.MaxSignalBars,
-		// TODO: display "searching/not connected" if not connected?
-		c.FullName, c.CarrierID, networkMode,
+		networkStatusText,
 		t.DownloadedMB, t.UploadedMB,
 		hoursConnected, minutesConnected)
 }
