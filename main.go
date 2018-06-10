@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os/exec"
 
 	"github.com/tombuildsstuff/huawei-e5573-mifi-sdk-go/mifi"
 )
@@ -19,6 +20,7 @@ type MifiInformation struct {
 
 func main() {
 	endpoint := flag.String("endpoint", "http://192.168.1.1", "The endpoint of the Mifi. Defaults to `http://192.168.1.1`")
+	showDashboard := flag.Bool("dashboard", false, "Opens the Dashboard in a Web Browser")
 	showVersion := flag.Bool("version", false, "Display the Application Version")
 	showHelp := flag.Bool("help", false, "Displays this message")
 
@@ -38,6 +40,15 @@ func main() {
 		Endpoint: *endpoint,
 	}
 
+	if *showDashboard {
+		err := openDashboard(m)
+		if err != nil {
+			panic(err)
+		}
+
+		return
+	}
+
 	err := run(m)
 	if err != nil {
 		panic(err)
@@ -54,6 +65,10 @@ func run(m mifi.Mifi) error {
 	println(output)
 
 	return nil
+}
+
+func openDashboard(m mifi.Mifi) error {
+	return exec.Command("open", m.Endpoint).Start()
 }
 
 func populateMifiInformation(m mifi.Mifi) (*MifiInformation, error) {
