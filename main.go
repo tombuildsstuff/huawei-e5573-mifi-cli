@@ -43,6 +43,7 @@ func main() {
 
 	if *showDashboard {
 		err := openDashboard(m)
+
 		if err != nil {
 			panic(err)
 		}
@@ -62,8 +63,7 @@ func run(m mifi.Mifi) error {
 		return fmt.Errorf("Error retrieving information for Mifi %q: %s", m.Endpoint, err)
 	}
 
-	output := info.format()
-	println(output)
+	fmt.Println(info.format())
 
 	return nil
 }
@@ -147,6 +147,7 @@ func buildGeneralInformation(s mifi.Status, w mifi.WifiSettings) string {
 	return fmt.Sprintf(`
   Information:
     Battery: %d%%
+    Charging: %t
     Wifi: %q (Country: %s | %d devices connected)
-`, s.CurrentBatteryPercentage, w.SSID, w.Country, s.NumberOfUsersConnectedToWifi)
+`, s.CurrentBatteryPercentage, s.BatteryCharging, w.SSID, w.Country, s.NumberOfUsersConnectedToWifi)
 }
